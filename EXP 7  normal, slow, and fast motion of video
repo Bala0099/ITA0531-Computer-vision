@@ -1,0 +1,44 @@
+import cv2
+
+def play_video(video_path, playback_speed=1):
+    # Open the video file
+    video = cv2.VideoCapture(video_path)
+    if not video.isOpened():
+        print("Error: Could not open the video.")
+        return
+
+    # Calculate delay between frames based on playback speed
+    fps = int(video.get(cv2.CAP_PROP_FPS))
+    delay = int(1000 / (fps * playback_speed))  # Delay in milliseconds
+
+    while True:
+        ret, frame = video.read()
+        if not ret:
+            break
+
+        # Display the video frame
+        cv2.imshow("Video Playback", frame)
+
+        # Break the loop if 'q' is pressed
+        if cv2.waitKey(delay) & 0xFF == ord('q'):
+            break
+
+    # Release the video capture object and close display window
+    video.release()
+    cv2.destroyAllWindows()
+
+# Example usage
+video_path = "vd.mp4"  # Replace with your video file path
+print("Press 'q' to quit playback at any time.")
+
+# Normal playback
+print("Playing at normal speed...")
+play_video(video_path, playback_speed=1)
+
+# Slow motion playback
+print("Playing in slow motion...")
+play_video(video_path, playback_speed=0.5)
+
+# Fast motion playback
+print("Playing in fast motion...")
+play_video(video_path, playback_speed=2)
